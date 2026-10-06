@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSIS - Four Corners 2B Practice Platform by Lida MONG</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fredoka & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        fredoka: ['Fredoka', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            pink: '#FF6B9B',
+                            purple: '#8B5CF6',
+                            blue: '#3B82F6',
+                            yellow: '#F59E0B',
+                            green: '#10B981',
+                            bgLight: '#FFF5F8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #FFF0F5 0%, #E6E6FA 50%, #F0F8FF 100%);
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, .font-fun {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        /* Custom Keyframe Animations */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(3deg); }
+        }
+
+        @keyframes bounceCute {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-18px); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 107, 155, 0.4); }
+            50% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.7); }
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        @keyframes spinSlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .animate-float { animation: floatSlow 4s ease-in-out infinite; }
+        .animate-cute-bounce { animation: bounceCute 1.2s ease-in-out infinite; }
+        .animate-glow { animation: pulseGlow 2s infinite; }
+        .animate-wiggle { animation: wiggle 0.6s ease-in-out infinite; }
+        .animate-spin-slow { animation: spinSlow 12s linear infinite; }
+
+        /* Cute Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F1F1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FF6B9B;
+            border-radius: 10px;
+        }
+
+        /* Card glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased flex flex-col min-h-screen justify-between p-2 sm:p-4">
+
+    <!-- Navigation / Header -->
+    <header class="max-w-5xl w-full mx-auto glass-card rounded-2xl p-4 mb-4 shadow-md flex justify-between items-center transition-all">
+        <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-pink-500 to-purple-600 flex items-center justify-center text-white text-2xl font-fun shadow-lg animate-float">
+                🎓
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-600 font-fun">PSIS</h1>
+                <p class="text-xs text-purple-600 font-medium">by Lida MONG • Four Corners 2B</p>
+            </div>
+        </div>
+
+        <!-- Student Badge Header (When logged in) -->
+        <div id="headerStudentBadge" class="hidden flex items-center space-x-3 bg-pink-50 px-4 py-2 rounded-xl border border-pink-200">
+            <div class="text-right">
+                <p id="headerStudentName" class="text-sm font-bold text-gray-800">Student</p>
+                <p id="headerStudentClass" class="text-xs text-pink-600 font-medium">Class</p>
+            </div>
+            <div class="w-9 h-9 rounded-full bg-pink-400 text-white flex items-center justify-center text-lg shadow-sm">
+                🌟
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-5xl w-full mx-auto flex-1 flex flex-col justify-center">
+
+        <!-- SCREEN 1: WELCOME SCREEN -->
+        <section id="screenWelcome" class="glass-card rounded-3xl p-6 sm:p-10 shadow-xl text-center relative overflow-hidden transition-all duration-300">
+            <div class="absolute -top-10 -left-10 w-32 h-32 bg-pink-300 rounded-full blur-2xl opacity-50"></div>
+            <div class="absolute -bottom-10 -right-10 w-36 h-36 bg-purple-300 rounded-full blur-2xl opacity-50"></div>
+
+            <div class="relative z-10 max-w-xl mx-auto">
+                <div class="inline-block px-4 py-1.5 bg-pink-100 text-pink-600 rounded-full text-xs font-bold uppercase tracking-wider mb-4 animate-bounce">
+                    ✨ Midterm Practice Handout & Quiz Platform ✨
+                </div>
+                <h1 class="text-4xl sm:text-6xl font-extrabold text-gray-800 font-fun mb-2 tracking-wide">
+                    PSIS <span class="text-pink-500">Practice</span> Hub
+                </h1>
+                <p class="text-lg text-purple-700 font-semibold mb-6">Designed by Lida MONG</p>
+                
+                <p class="text-gray-600 text-sm sm:text-base mb-8 leading-relaxed">
+                    Master your <strong>Four Corners 2B (Units 7–9)</strong> Midterm Exam! Practice all 100 interactive exercises with instant feedback, earn stars, and unlock your final certificate!
+                </p>
+
+                <!-- Onboarding Form -->
+                <div class="bg-white/80 p-6 rounded-2xl border border-pink-100 shadow-sm space-y-4 mb-8">
+                    <div class="text-left">
+                        <label class="block text-xs font-bold text-gray-600 uppercase mb-1 ml-1">Student Full Name</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-pink-400">
+                                <i class="fa-solid fa-user"></i>
+                            </span>
+                            <input type="text" id="inputStudentName" placeholder="e.g. Sokha Chan" 
+                                class="w-full pl-10 pr-4 py-3 rounded-xl border border-pink-200 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 outline-none transition text-gray-800 font-medium">
+                        </div>
+                    </div>
+
+                    <div class="text-left">
+                        <label class="block text-xs font-bold text-gray-600 uppercase mb-1 ml-1">Class / Student ID</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-purple-400">
+                                <i class="fa-solid fa-id-card"></i>
+                            </span>
+                            <input type="text" id="inputStudentClass" placeholder="e.g. Class 2B - ID 1024" 
+                                class="w-full pl-10 pr-4 py-3 rounded-xl border border-pink-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition text-gray-800 font-medium">
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="startApp()" class="w-full py-4 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white font-fun text-xl font-bold rounded-2xl shadow-lg hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] transition duration-200 animate-glow">
+                    Let's Go! 🚀
+                </button>
+            </div>
+        </section>
+
+        <!-- SCREEN 2: ROADMAP HUB -->
+        <section id="screenRoadmap" class="hidden glass-card rounded-3xl p-6 sm:p-8 shadow-xl transition-all duration-300">
+            <!-- Top Dashboard Stats -->
+            <div class="flex flex-col md:flex-row justify-between items-center bg-white rounded-2xl p-6 shadow-sm border border-purple-100 mb-8 gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold font-fun text-gray-800">Welcome, <span id="hubStudentName" class="text-pink-500">Student</span>! 👋</h2>
+                    <p class="text-sm text-gray-500">Complete all 3 sections to finish your practice exam.</p>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <div class="text-center">
+                        <p class="text-xs text-gray-400 font-bold uppercase">Total Progress</p>
+                        <p id="hubTotalProgressText" class="text-2xl font-bold text-purple-600 font-fun">0 / 100</p>
+                    </div>
+                    <div class="w-px h-10 bg-gray-200"></div>
+                    <div class="text-center">
+                        <p class="text-xs text-gray-400 font-bold uppercase">Overall Score</p>
+                        <p id="hubTotalScoreText" class="text-2xl font-bold text-pink-500 font-fun">0%</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="mb-8">
+                <div class="flex justify-between text-xs font-bold text-purple-700 mb-2">
+                    <span>Overall Practice Completion</span>
+                    <span id="progressBarPercentage">0%</span>
+                </div>
+                <div class="w-full h-4 bg-purple-100 rounded-full overflow-hidden p-0.5 shadow-inner">
+                    <div id="mainProgressBar" class="h-full bg-gradient-to-r from-pink-500 to-purple-600 rounded-full transition-all duration-500 w-0"></div>
+                </div>
+            </div>
+
+            <!-- Roadmap Stages Cards -->
+            <h3 class="text-xl font-bold font-fun text-gray-800 mb-4 flex items-center">
+                <i class="fa-solid fa-map-location-dot text-pink-500 mr-2"></i> Practice Roadmap
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Section 1 Card -->
+                <div id="cardSection1" class="bg-white rounded-2xl p-6 border-2 border-pink-200 shadow-sm relative overflow-hidden flex flex-col justify-between hover:shadow-md transition">
+                    <div class="absolute top-3 right-3">
+                        <span id="statusBadgeSec1" class="px-3 py-1 bg-yellow-100 text-yellow-700 font-bold text-xs rounded-full">
+                            Ready 🚀
+                        </span>
+                    </div>
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-pink-100 text-pink-500 flex items-center justify-center text-2xl font-fun mb-4">
+                            01
+                        </div>
+                        <h4 class="text-lg font-bold font-fun text-gray-800">Grammar Sprint</h4>
+                        <p class="text-xs text-gray-500 mt-1">Comparatives, Superlatives & Simple Past Tense</p>
+                        <p class="text-xs font-semibold text-pink-600 mt-3">Questions 1 – 40</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-gray-100">
+                        <div class="flex justify-between text-xs text-gray-500 mb-2 font-medium">
+                            <span>Score:</span>
+                            <span id="scoreTextSec1" class="font-bold text-gray-800">Not Started</span>
+                        </div>
+                        <button onclick="launchQuizSection(1)" class="w-full py-2.5 bg-pink-500 hover:bg-pink-600 text-white font-fun font-semibold rounded-xl text-sm shadow transition">
+                            Start Section 1
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Section 2 Card -->
+                <div id="cardSection2" class="bg-white rounded-2xl p-6 border-2 border-purple-200 shadow-sm relative overflow-hidden flex flex-col justify-between hover:shadow-md transition opacity-90">
+                    <div class="absolute top-3 right-3">
+                        <span id="statusBadgeSec2" class="px-3 py-1 bg-gray-100 text-gray-600 font-bold text-xs rounded-full">
+                            Locked 🔒
+                        </span>
+                    </div>
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-500 flex items-center justify-center text-2xl font-fun mb-4">
+                            02
+                        </div>
+                        <h4 class="text-lg font-bold font-fun text-gray-800">Structure & Rules</h4>
+                        <p class="text-xs text-gray-500 mt-1">Wh- Questions & Too / Enough</p>
+                        <p class="text-xs font-semibold text-purple-600 mt-3">Questions 41 – 70</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-gray-100">
+                        <div class="flex justify-between text-xs text-gray-500 mb-2 font-medium">
+                            <span>Score:</span>
+                            <span id="scoreTextSec2" class="font-bold text-gray-800">Locked</span>
+                        </div>
+                        <button id="btnSec2" onclick="launchQuizSection(2)" disabled class="w-full py-2.5 bg-gray-300 text-white font-fun font-semibold rounded-xl text-sm cursor-not-allowed transition">
+                            Locked
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Section 3 Card -->
+                <div id="cardSection3" class="bg-white rounded-2xl p-6 border-2 border-indigo-200 shadow-sm relative overflow-hidden flex flex-col justify-between hover:shadow-md transition opacity-90">
+                    <div class="absolute top-3 right-3">
+                        <span id="statusBadgeSec3" class="px-3 py-1 bg-gray-100 text-gray-600 font-bold text-xs rounded-full">
+                            Locked 🔒
+                        </span>
+                    </div>
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-500 flex items-center justify-center text-2xl font-fun mb-4">
+                            03
+                        </div>
+                        <h4 class="text-lg font-bold font-fun text-gray-800">Modals, Vocab & Reading</h4>
+                        <p class="text-xs text-gray-500 mt-1">Modals, Clothing, Jobs & Reading Comprehension</p>
+                        <p class="text-xs font-semibold text-indigo-600 mt-3">Questions 71 – 100</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-gray-100">
+                        <div class="flex justify-between text-xs text-gray-500 mb-2 font-medium">
+                            <span>Score:</span>
+                            <span id="scoreTextSec3" class="font-bold text-gray-800">Locked</span>
+                        </div>
+                        <button id="btnSec3" onclick="launchQuizSection(3)" disabled class="w-full py-2.5 bg-gray-300 text-white font-fun font-semibold rounded-xl text-sm cursor-not-allowed transition">
+                            Locked
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Finish Exam Action -->
+            <div class="text-center">
+                <button id="btnViewFinalResults" onclick="showResultsScreen()" disabled class="px-8 py-3 bg-gray-300 text-white font-fun text-lg font-bold rounded-2xl cursor-not-allowed transition shadow">
+                    View Final Assessment & Certificate 🏆
+                </button>
+            </div>
+        </section>
+
+        <!-- SCREEN 3: QUIZ ENGINE -->
+        <section id="screenQuiz" class="hidden glass-card rounded-3xl p-6 sm:p-8 shadow-xl transition-all duration-300">
+            <!-- Quiz Nav Bar -->
+            <div class="flex justify-between items-center mb-6 border-b border-gray-200/80 pb-4">
+                <button onclick="returnToRoadmap()" class="text-xs sm:text-sm font-bold text-gray-600 hover:text-pink-500 flex items-center transition">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Roadmap
+                </button>
+                <div class="text-center">
+                    <span id="quizSectionTitle" class="px-3 py-1 bg-purple-100 text-purple-700 font-fun font-bold text-xs rounded-full">
+                        Section 1: Grammar Sprint
+                    </span>
+                </div>
+                <div class="text-xs sm:text-sm font-bold text-purple-600 font-fun" id="quizQuestionCounter">
+                    Question 1 / 40
+                </div>
+            </div>
+
+            <!-- Active Question Container -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-purple-100 mb-6">
+                <div class="flex items-center space-x-2 text-xs font-bold text-pink-500 uppercase tracking-wider mb-2" id="quizTopicTag">
+                    <span>Topic: Comparatives</span>
+                </div>
+                
+                <h3 id="quizQuestionText" class="text-xl sm:text-2xl font-bold font-fun text-gray-800 mb-6">
+                    Loading question...
+                </h3>
+
+                <!-- Context Box (Reading Passages or Hints if any) -->
+                <div id="quizContextBox" class="hidden mb-6 p-4 bg-purple-50 rounded-xl border border-purple-100 text-sm text-gray-700 leading-relaxed italic">
+                </div>
+
+                <!-- Answer Options Container -->
+                <div id="quizOptionsContainer" class="grid grid-cols-1 gap-3">
+                    <!-- Options injected by JS -->
+                </div>
+
+                <!-- Instant Feedback Banner -->
+                <div id="quizFeedbackBox" class="hidden mt-6 p-4 rounded-xl text-sm font-semibold flex items-center space-x-3 transition">
+                    <span id="quizFeedbackIcon" class="text-2xl"></span>
+                    <div id="quizFeedbackText"></div>
+                </div>
+            </div>
+
+            <!-- Quiz Footer Controls -->
+            <div class="flex justify-between items-center">
+                <button id="btnPrevQuestion" onclick="prevQuestion()" disabled class="px-4 py-2 bg-gray-200 text-gray-500 font-fun text-sm font-bold rounded-xl disabled:opacity-50 transition">
+                    Previous
+                </button>
+                <button id="btnNextQuestion" onclick="nextQuestion()" class="px-6 py-2.5 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-fun text-base font-bold rounded-xl shadow-md hover:scale-105 active:scale-95 transition">
+                    Next Question ➔
+                </button>
+            </div>
+        </section>
+
+        <!-- SCREEN 4: RESULTS & CERTIFICATE -->
+        <section id="screenResults" class="hidden glass-card rounded-3xl p-6 sm:p-10 shadow-xl text-center transition-all duration-300">
+            <!-- Dynamic Emoji Badge -->
+            <div class="inline-block relative mb-4">
+                <div id="resultEmoji" class="text-7xl sm:text-8xl animate-cute-bounce">
+                    🏆
+                </div>
+            </div>
+
+            <h2 id="resultTitle" class="text-3xl sm:text-5xl font-extrabold font-fun text-gray-800 mb-2">
+                Super Star!
+            </h2>
+            <p id="resultSubtitle" class="text-lg font-semibold text-pink-600 mb-6">
+                Excellent performance on your Four Corners 2B Midterm!
+            </p>
+
+            <!-- Total Score Badge -->
+            <div class="bg-gradient-to-r from-pink-500 to-purple-600 text-white p-6 rounded-2xl max-w-sm mx-auto shadow-lg mb-8">
+                <p class="text-xs uppercase font-bold tracking-wider opacity-80">Final Exam Score</p>
+                <p id="resultFinalScore" class="text-5xl font-extrabold font-fun my-1">98%</p>
+                <p id="resultRawScore" class="text-sm font-medium">98 out of 100 questions correct</p>
+            </div>
+
+            <!-- Personal Note from Teacher -->
+            <div class="bg-white p-6 rounded-2xl border border-pink-100 shadow-sm max-w-xl mx-auto mb-8 text-left">
+                <div class="flex items-center space-x-3 mb-2">
+                    <span class="text-2xl">👩‍🏫</span>
+                    <h4 class="font-bold font-fun text-gray-800">Teacher's Assessment Note</h4>
+                </div>
+                <p id="resultTeacherNote" class="text-sm text-gray-600 leading-relaxed italic">
+                    "Great effort! You have demonstrated wonderful mastery of Units 7-9."
+                </p>
+            </div>
+
+            <!-- Breakdown per Section -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto mb-8">
+                <div class="bg-white/80 p-4 rounded-xl border border-pink-100">
+                    <p class="text-xs text-gray-400 font-bold uppercase">Section 1</p>
+                    <p class="text-lg font-bold font-fun text-pink-500" id="resSec1Score">0 / 40</p>
+                    <p class="text-[10px] text-gray-500">Grammar Sprint</p>
+                </div>
+                <div class="bg-white/80 p-4 rounded-xl border border-purple-100">
+                    <p class="text-xs text-gray-400 font-bold uppercase">Section 2</p>
+                    <p class="text-lg font-bold font-fun text-purple-500" id="resSec2Score">0 / 30</p>
+                    <p class="text-[10px] text-gray-500">Structure & Rules</p>
+                </div>
+                <div class="bg-white/80 p-4 rounded-xl border border-indigo-100">
+                    <p class="text-xs text-gray-400 font-bold uppercase">Section 3</p>
+                    <p class="text-lg font-bold font-fun text-indigo-500" id="resSec3Score">0 / 30</p>
+                    <p class="text-[10px] text-gray-500">Modals & Reading</p>
+                </div>
+            </div>
+
+            <!-- Printable Certificate Section -->
+            <div id="certificateCard" class="bg-white p-8 rounded-3xl border-4 border-pink-300 shadow-xl max-w-2xl mx-auto mb-8 text-center relative overflow-hidden">
+                <div class="absolute -top-12 -right-12 w-28 h-28 bg-pink-100 rounded-full"></div>
+                <div class="absolute -bottom-12 -left-12 w-28 h-28 bg-purple-100 rounded-full"></div>
+                
+                <p class="text-xs uppercase tracking-widest font-bold text-pink-500 mb-1">Official Practice Certificate</p>
+                <h3 class="text-2xl sm:text-3xl font-extrabold font-fun text-gray-800 mb-4">CERTIFICATE OF ACHIEVEMENT</h3>
+                <p class="text-sm text-gray-500 mb-2">This is proudly awarded to</p>
+                <h4 id="certStudentName" class="text-2xl font-bold font-fun text-purple-600 border-b-2 border-purple-200 inline-block px-6 pb-1 mb-3">Student Name</h4>
+                <p class="text-xs text-gray-600 max-w-md mx-auto mb-4">
+                    for successfully completing the <strong>Four Corners 2B (Units 7–9) Midterm Practice Exam</strong> with an overall score of <span id="certScore" class="font-bold text-pink-500">100%</span>.
+                </p>
+                
+                <div class="flex justify-between items-end mt-6 pt-4 border-t border-gray-100 text-left">
+                    <div>
+                        <p class="text-[10px] text-gray-400 uppercase font-bold">Issued By</p>
+                        <p class="text-xs font-bold text-gray-700 font-fun">Teacher Lida MONG</p>
+                        <p class="text-[10px] text-gray-500">PSIS Program</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[10px] text-gray-400 uppercase font-bold">Date Completed</p>
+                        <p id="certDate" class="text-xs font-bold text-gray-700">October 2026</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap justify-center gap-4">
+                <button onclick="window.print()" class="px-6 py-3 bg-indigo-500 hover:bg-indigo-600 text-white font-fun font-bold rounded-2xl shadow transition flex items-center">
+                    <i class="fa-solid fa-print mr-2"></i> Print Certificate
+                </button>
+                <button onclick="resetApp()" class="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-fun font-bold rounded-2xl shadow hover:scale-105 transition">
+                    Try Again 🔄
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-5xl w-full mx-auto text-center py-4 text-xs text-purple-700 font-medium">
+        PSIS Midterm Examination Prep • Four Corners 2B (Units 7–9) • Created with ❤️ by <strong>Lida MONG</strong>
+    </footer>
+
+    <script>
+        /* Complete 100 Questions Database for Four Corners 2B Units 7-9 */
+        const QUESTION_DATABASE = [
+            // SECTION 1: GRAMMAR SPRINT (1 - 40)
+            { id: 1, section: 1, topic: "Comparatives", question: "Dara is __________ student in my class.", options: ["a. the tallest", "b. taller than", "c. more tall", "d. tall"], answer: 0 },
+            { id: 2, section: 1, topic: "Comparatives", question: "Andy is __________ his brother.", options: ["a. smart than", "b. smarter than", "c. more smart", "d. smart"], answer: 1 },
+            { id: 3, section: 1, topic: "Superlatives", question: "Jimmy weighs 90 kilograms. He is __________ kid in the family.", options: ["a. heavier than", "b. heavy", "c. the heaviest", "d. the most heavy"], answer: 2 },
+            { id: 4, section: 1, topic: "Comparatives", question: "Andre Agassi was a great player, but Roger Federer is even __________.", options: ["a. best", "b. better", "c. gooder", "d. more good"], answer: 1 },
+            { id: 5, section: 1, topic: "Superlatives", question: "Who is __________ man in the world?", options: ["a. stronger than", "b. the most strong", "c. the strongest", "d. strong"], answer: 2 },
+            { id: 6, section: 1, topic: "Comparatives", question: "He was lazy before, but now he is __________ than before.", options: ["a. hard-working", "b. hard-workinger", "c. more hard-working", "d. most hard-working"], answer: 2 },
+            { id: 7, section: 1, topic: "Comparatives", question: "I like the new teacher. She is __________ our old teacher.", options: ["a. more patient", "b. patienter than", "c. more patient then", "d. more patient than"], answer: 3 },
+            { id: 8, section: 1, topic: "Superlatives", question: "Mount Everest is __________ mountain in the world.", options: ["a. the highest", "b. higher than", "c. high", "d. most high"], answer: 0 },
+            { id: 9, section: 1, topic: "Comparatives", question: "This jacket is __________ than that coat.", options: ["a. expensiver", "b. more expensive", "c. most expensive", "d. expensive than"], answer: 1 },
+            { id: 10, section: 1, topic: "Comparatives", question: "Summer is __________ than winter in Phnom Penh.", options: ["a. hoter", "b. hotter", "c. more hot", "d. hottest"], answer: 1 },
+            { id: 11, section: 1, topic: "Superlatives", question: "Which subject is __________ for you?", options: ["a. the most difficult", "b. difficult than", "c. more difficult", "d. the difficultest"], answer: 0 },
+            { id: 12, section: 1, topic: "Comparatives", question: "My new apartment is __________ than my old one.", options: ["a. bigger", "b. biger", "c. more big", "d. biggest"], answer: 0 },
+            { id: 13, section: 1, topic: "Comparatives", question: "Learning English is __________ than learning Chinese for me.", options: ["a. easyer", "b. easier", "c. more easy", "d. standard"], answer: 1 },
+            { id: 14, section: 1, topic: "Superlatives", question: "Who is __________ athlete in Cambodia?", options: ["a. most famous", "b. the most famous", "c. famouser", "d. more famous"], answer: 1 },
+            { id: 15, section: 1, topic: "Comparatives", question: "This market is __________ on Sundays than on weekdays.", options: ["a. crowdeder", "b. more crowded", "c. most crowded", "d. crowded"], answer: 1 },
+            { id: 16, section: 1, topic: "Comparatives", question: "My brother is __________ than me by two years.", options: ["a. younger", "b. more young", "c. young", "d. youngest"], answer: 0 },
+            { id: 17, section: 1, topic: "Superlatives", question: "That was __________ movie I have ever watched!", options: ["a. worse", "b. the worst", "c. badder", "d. the baddest"], answer: 1 },
+            { id: 18, section: 1, topic: "Comparatives", question: "Health is __________ than money.", options: ["a. more important", "b. importanter", "c. most important", "d. important"], answer: 0 },
+            { id: 19, section: 1, topic: "Comparatives", question: "Sokha runs __________ than Borith.", options: ["a. faster", "b. fastly", "c. more fast", "d. fastest"], answer: 0 },
+            { id: 20, section: 1, topic: "Superlatives", question: "Who is __________ singer in your school?", options: ["a. goodest", "b. the best", "c. better", "d. best than"], answer: 1 },
+            
+            // Simple Past Tense (21 - 40)
+            { id: 21, section: 1, topic: "Simple Past", question: "The weather __________ (be) very hot yesterday.", options: ["a. is", "b. was", "c. were", "d. been"], answer: 1 },
+            { id: 22, section: 1, topic: "Simple Past", question: "What time __________ the students __________ (finish) the class?", options: ["a. do / finish", "b. did / finished", "c. did / finish", "d. was / finish"], answer: 2 },
+            { id: 23, section: 1, topic: "Simple Past", question: "My younger sister __________ (not / listen) to what mum said.", options: ["a. didn't listened", "b. don't listen", "c. didn't listen", "d. doesn't listen"], answer: 2 },
+            { id: 24, section: 1, topic: "Simple Past", question: "I __________ (meet) Sophea at the park yesterday.", options: ["a. meeted", "b. met", "c. meet", "d. meeting"], answer: 1 },
+            { id: 25, section: 1, topic: "Simple Past", question: "Mr. Moly __________ (build) this house 10 years ago.", options: ["a. builded", "b. built", "c. builds", "d. building"], answer: 1 },
+            { id: 26, section: 1, topic: "Simple Past", question: "We __________ (not / go) to Kep last weekend because of rain.", options: ["a. didn't went", "b. didn't go", "c. wasn't go", "d. don't go"], answer: 1 },
+            { id: 27, section: 1, topic: "Simple Past", question: "Where __________ you __________ (buy) that beautiful shirt?", options: ["a. did / buy", "b. did / bought", "c. do / buy", "d. were / buy"], answer: 0 },
+            { id: 28, section: 1, topic: "Simple Past", question: "They __________ (be) very happy with their exam results.", options: ["a. was", "b. were", "c. are", "d. did"], answer: 1 },
+            { id: 29, section: 1, topic: "Simple Past", question: "She __________ (write) a letter to her grandmother yesterday.", options: ["a. writed", "b. wrote", "c. written", "d. writes"], answer: 1 },
+            { id: 30, section: 1, topic: "Simple Past", question: "What __________ you __________ (eat) for breakfast this morning?", options: ["a. did / ate", "b. did / eat", "c. do / eat", "d. was / eat"], answer: 1 },
+            { id: 31, section: 1, topic: "Simple Past", question: "They __________ (have) a great time at AEON Mall.", options: ["a. haved", "b. had", "c. has", "d. having"], answer: 1 },
+            { id: 32, section: 1, topic: "Simple Past", question: "My parents __________ (not / take) the bus to work yesterday.", options: ["a. didn't took", "b. didn't take", "c. don't take", "d. wasn't take"], answer: 1 },
+            { id: 33, section: 1, topic: "Simple Past", question: "Who __________ (win) the football match last night?", options: ["a. winned", "b. won", "c. wins", "d. winning"], answer: 1 },
+            { id: 34, section: 1, topic: "Simple Past", question: "I __________ (lose) my keys at the coffee shop.", options: ["a. lost", "b. losed", "c. lose", "d. losing"], answer: 0 },
+            { id: 35, section: 1, topic: "Simple Past", question: "The teacher __________ (explain) the grammar rule clearly.", options: ["a. explain", "b. explained", "c. explains", "d. explaining"], answer: 1 },
+            { id: 36, section: 1, topic: "Simple Past", question: "Did you __________ (see) the new movie yesterday?", options: ["a. saw", "b. see", "c. seen", "d. seeing"], answer: 1 },
+            { id: 37, section: 1, topic: "Simple Past", question: "He __________ (drink) two cups of coffee this morning.", options: ["a. drank", "b. drinked", "c. drunk", "d. drinks"], answer: 0 },
+            { id: 38, section: 1, topic: "Simple Past", question: "She __________ (leave) the house at 7:00 AM.", options: ["a. leaved", "b. left", "c. leaves", "d. leaving"], answer: 1 },
+            { id: 39, section: 1, topic: "Simple Past", question: "We __________ (study) Units 7 and 8 last week.", options: ["a. studyed", "b. studied", "c. study", "d. studying"], answer: 1 },
+            { id: 40, section: 1, topic: "Simple Past", question: "My friend __________ (give) me a nice present on my birthday.", options: ["a. gived", "b. gave", "c. given", "d. gives"], answer: 1 },
+
+            // SECTION 2: STRUCTURE & RULES (41 - 70)
+            // Wh- Question Words (41 - 55)
+            { id: 41, section: 2, topic: "Wh- Words", question: "A: __________ built the house? B: Mr. Moly built it.", options: ["a. What", "b. Who", "c. Where", "d. Why"], answer: 1 },
+            { id: 42, section: 2, topic: "Wh- Words", question: "A: __________ was the house? B: It was 46 years old.", options: ["a. How long", "b. How old", "c. How many", "d. How much"], answer: 1 },
+            { id: 43, section: 2, topic: "Wh- Words", question: "A: __________ was the house broken? B: Because it was very old.", options: ["a. Why", "b. How", "c. When", "d. Where"], answer: 0 },
+            { id: 44, section: 2, topic: "Wh- Words", question: "A: __________ rooms did the house have? B: It had six rooms.", options: ["a. How much", "b. How many", "c. How long", "d. What"], answer: 1 },
+            { id: 45, section: 2, topic: "Wh- Words", question: "A: When is your birthday? B: __________ in January.", options: ["a. I am", "b. My birthday are", "c. They are", "d. It is"], answer: 3 },
+            { id: 46, section: 2, topic: "Wh- Words", question: "A: __________ did you buy at the supermarket? B: I bought some fruits.", options: ["a. Where", "b. What", "c. Who", "d. How"], answer: 1 },
+            { id: 47, section: 2, topic: "Wh- Words", question: "A: __________ did they go for their holiday? B: They went to Siem Reap.", options: ["a. Where", "b. When", "c. Who", "d. Why"], answer: 0 },
+            { id: 48, section: 2, topic: "Wh- Words", question: "A: __________ does this sweater cost? B: It costs $25.", options: ["a. How many", "b. How much", "c. How old", "d. How long"], answer: 1 },
+            { id: 49, section: 2, topic: "Wh- Words", question: "A: __________ did you stay in Kampot? B: We stayed there for three days.", options: ["a. How long", "b. How many", "c. How much", "d. When"], answer: 0 },
+            { id: 50, section: 2, topic: "Wh- Words", question: "A: __________ do you usually travel to school? B: By motorbike.", options: ["a. How", "b. What", "c. Why", "d. Where"], answer: 0 },
+            { id: 51, section: 2, topic: "Wh- Words", question: "A: __________ is your favorite tennis athlete? B: Serena Williams.", options: ["a. Who", "b. What", "c. Which", "d. Where"], answer: 0 },
+            { id: 52, section: 2, topic: "Wh- Words", question: "A: __________ didn't you come to class yesterday? B: Because I was sick.", options: ["a. Why", "b. How", "c. When", "d. Where"], answer: 0 },
+            { id: 53, section: 2, topic: "Wh- Words", question: "A: __________ people were invited to the party? B: About twenty people.", options: ["a. How much", "b. How many", "c. How long", "d. Who"], answer: 1 },
+            { id: 54, section: 2, topic: "Wh- Words", question: "A: __________ time did you wake up today? B: At 6:30 AM.", options: ["a. What", "b. When", "c. How", "d. Where"], answer: 0 },
+            { id: 55, section: 2, topic: "Wh- Words", question: "A: __________ is the nearest bus station? B: Just down the street.", options: ["a. Where", "b. What", "c. How", "d. Who"], answer: 0 },
+
+            // Too / Enough (56 - 70)
+            { id: 56, section: 2, topic: "Too / Enough", question: "I don't have __________ to buy that expensive car.", options: ["a. enough money", "b. money enough", "c. too money", "d. money too"], answer: 0 },
+            { id: 57, section: 2, topic: "Too / Enough", question: "This apartment is $350. It is __________ for me.", options: ["a. enough expensive", "b. too expensive", "c. expensive too", "d. expensive enough"], answer: 1 },
+            { id: 58, section: 2, topic: "Too / Enough", question: "I want to study French, but I don't have __________.", options: ["a. time enough", "b. enough time", "c. too time", "d. time too"], answer: 1 },
+            { id: 59, section: 2, topic: "Too / Enough", question: "My daughter cannot fit in the sweater. It isn't __________ for her.", options: ["a. big enough", "b. enough big", "c. too big", "d. big too"], answer: 0 },
+            { id: 60, section: 2, topic: "Too / Enough", question: "The coffee is __________ to drink right now.", options: ["a. hot too", "b. too hot", "c. enough hot", "d. hot enough"], answer: 1 },
+            { id: 61, section: 2, topic: "Too / Enough", question: "We don't have __________ for all the guests.", options: ["a. chairs enough", "b. enough chairs", "c. too chairs", "d. chairs too"], answer: 1 },
+            { id: 62, section: 2, topic: "Too / Enough", question: "He is not __________ to drive a car.", options: ["a. old enough", "b. enough old", "c. too old", "d. old too"], answer: 0 },
+            { id: 63, section: 2, topic: "Too / Enough", question: "Don't carry that bag. It is __________ for you.", options: ["a. heavy too", "b. too heavy", "c. enough heavy", "d. heavy enough"], answer: 1 },
+            { id: 64, section: 2, topic: "Too / Enough", question: "Is your soup __________, or should I heat it up?", options: ["a. warm enough", "b. enough warm", "c. too warm", "d. warm too"], answer: 0 },
+            { id: 65, section: 2, topic: "Too / Enough", question: "She didn't buy the dress because it was __________.", options: ["a. tight too", "b. too tight", "c. enough tight", "d. tight enough"], answer: 1 },
+            { id: 66, section: 2, topic: "Too / Enough", question: "They have __________ for the entire week.", options: ["a. food enough", "b. enough food", "c. too food", "d. food too"], answer: 1 },
+            { id: 67, section: 2, topic: "Too / Enough", question: "The music is __________. Please turn it down.", options: ["a. loud too", "b. too loud", "c. enough loud", "d. loud enough"], answer: 1 },
+            { id: 68, section: 2, topic: "Too / Enough", question: "Did you get __________ last night?", options: ["a. sleep enough", "b. enough sleep", "c. too sleep", "d. sleep too"], answer: 1 },
+            { id: 69, section: 2, topic: "Too / Enough", question: "The swimming pool isn't __________ for swimming.", options: ["a. clean enough", "b. enough clean", "c. too clean", "d. clean too"], answer: 0 },
+            { id: 70, section: 2, topic: "Too / Enough", question: "These shoes are __________ for my feet.", options: ["a. small too", "b. too small", "c. enough small", "d. small enough"], answer: 1 },
+
+            // SECTION 3: MODALS, VOCAB & READING (71 - 100)
+            // Modals (71 - 85)
+            { id: 71, section: 3, topic: "Modals", question: "A: He __________ to class earlier. B: Alright. I will tell him.", options: ["a. should coming", "b. should come", "c. should to come", "d. should comes"], answer: 1 },
+            { id: 72, section: 3, topic: "Modals", question: "It is 8 PM now. Where __________ I buy groceries at this time?", options: ["a. can", "b. shouldn't", "c. can't", "d. must not"], answer: 0 },
+            { id: 73, section: 3, topic: "Modals", question: "The store closes at 8:30 PM. You __________ go now if you want to buy something.", options: ["a. should", "b. shouldn't", "c. can't", "d. wouldn't"], answer: 0 },
+            { id: 74, section: 3, topic: "Modals", question: "You __________ eat so much junk food; it is bad for your health.", options: ["a. should", "b. shouldn't", "c. can", "d. could"], answer: 1 },
+            { id: 75, section: 3, topic: "Modals", question: "Excuse me, __________ you tell me where the library is?", options: ["a. can", "b. shouldn't", "c. can't", "d. must"], answer: 0 },
+            { id: 76, section: 3, topic: "Modals", question: "Students __________ study hard if they want to pass the midterm exam.", options: ["a. shouldn't", "b. should", "c. can't", "d. wouldn't"], answer: 1 },
+            { id: 77, section: 3, topic: "Modals", question: "I'm sorry, I __________ hear you. The music is too loud!", options: ["a. can", "b. should", "c. can't", "d. shouldn't"], answer: 2 },
+            { id: 78, section: 3, topic: "Modals", question: "You __________ drink cold water when you have a sore throat.", options: ["a. should", "b. shouldn't", "c. can", "d. could"], answer: 1 },
+            { id: 79, section: 3, topic: "Modals", question: "A: __________ I borrow your pencil? B: Yes, of course.", options: ["a. Can", "b. Shouldn't", "c. Can't", "d. Would"], answer: 0 },
+            { id: 80, section: 3, topic: "Modals", question: "It's raining heavily outside. You __________ drive too fast.", options: ["a. should", "b. shouldn't", "c. can", "d. must"], answer: 1 },
+            { id: 81, section: 3, topic: "Modals", question: "She __________ speak three languages fluently: Khmer, English, and French.", options: ["a. can", "b. shouldn't", "c. can't", "d. should to"], answer: 0 },
+            { id: 82, section: 3, topic: "Modals", question: "You __________ stay up late tonight because we have an early test tomorrow.", options: ["a. should", "b. shouldn't", "c. can", "d. could"], answer: 1 },
+            { id: 83, section: 3, topic: "Modals", question: "Where __________ we go for dinner tonight? Do you have any ideas?", options: ["a. should", "b. shouldn't", "c. can't", "d. wouldn't"], answer: 0 },
+            { id: 84, section: 3, topic: "Modals", question: "He __________ play basketball today because he broke his leg yesterday.", options: ["a. can", "b. should", "c. can't", "d. shouldn't"], answer: 2 },
+            { id: 85, section: 3, topic: "Modals", question: "You __________ always double-check your answers before handing in your test.", options: ["a. should", "b. shouldn't", "c. can't", "d. wouldn't"], answer: 0 },
+
+            // Vocab: Clothes & Professions (86 - 95)
+            { id: 86, section: 3, topic: "Vocabulary", question: "Who were the first __________ to win Wimbledon?", options: ["a. authors", "b. artists", "c. athletes", "d. composers"], answer: 2 },
+            { id: 87, section: 3, topic: "Vocabulary", question: "Mary decided to wear a __________ blue dress with no patterns.", options: ["a. plain", "b. uncomfortable", "c. tight", "d. crowded"], answer: 0 },
+            { id: 88, section: 3, topic: "Vocabulary", question: "J.K. Rowling is a world-famous __________ who wrote Harry Potter.", options: ["a. athlete", "b. author", "c. composer", "d. scientist"], answer: 1 },
+            { id: 89, section: 3, topic: "Vocabulary", question: "These high-heeled shoes are very __________; my feet hurt after walking.", options: ["a. comfortable", "b. plain", "c. uncomfortable", "d. stylish"], answer: 2 },
+            { id: 90, section: 3, topic: "Vocabulary", question: "Mozart was a famous __________ who wrote classical music.", options: ["a. artist", "b. composer", "c. engineer", "d. architect"], answer: 1 },
+            { id: 91, section: 3, topic: "Vocabulary", question: "He prefers to wear __________ clothes like jeans and T-shirts to work.", options: ["a. formal", "b. plain", "c. casual", "d. baggy"], answer: 2 },
+            { id: 92, section: 3, topic: "Vocabulary", question: "Picasso was an amazing __________ who painted many world-famous paintings.", options: ["a. artist", "b. author", "c. athlete", "d. doctor"], answer: 0 },
+            { id: 93, section: 3, topic: "Vocabulary", question: "This winter jacket is very __________; it keeps me warm when it's cold.", options: ["a. uncomfortable", "b. cozy", "c. plain", "d. thin"], answer: 1 },
+            { id: 94, section: 3, topic: "Vocabulary", question: "Professional __________ train every single day to stay fit for competition.", options: ["a. writers", "b. composers", "c. athletes", "d. artists"], answer: 2 },
+            { id: 95, section: 3, topic: "Vocabulary", question: "She bought a very __________ suit for her job interview at the bank.", options: ["a. formal", "b. baggy", "c. casual", "d. uncomfortable"], answer: 0 },
+
+            // Reading Comprehension (96 - 100)
+            { 
+                id: 96, section: 3, topic: "Reading Comprehension", 
+                context: "Neil: Hey, Rob! Do you have any plans for the weekend?\nRob: Not really, but my parents might ask me to go out with them.\nNeil: Hmmm, where is your family going?\nRob: I don't know yet. You know my mum changes her mind every time, and we all have to follow her. Last time she wanted to go to Kampot, or perhaps Kep. I am not really sure.",
+                question: "1. Does Rob have a clear plan to go out with Neil this weekend?", 
+                options: ["a. Yes, he has a clear plan.", "b. No, he does not have a clear plan.", "c. Yes, he is going to Kampot with Neil.", "d. No, he is staying at school."], answer: 1 
+            },
+            { 
+                id: 97, section: 3, topic: "Reading Comprehension", 
+                context: "Neil: Hey, Rob! Do you have any plans for the weekend?\nRob: Not really, but my parents might ask me to go out with them.\nNeil: Hmmm, where is your family going?\nRob: I don't know yet. You know my mum changes her mind every time, and we all have to follow her. Last time she wanted to go to Kampot, or perhaps Kep. I am not really sure.",
+                question: "2. Can Rob definitely go out with Neil this weekend?", 
+                options: ["a. Yes, he can.", "b. No, he might have to go with his parents.", "c. Yes, his mum invited Neil.", "d. No, Rob is sick."], answer: 1 
+            },
+            { 
+                id: 98, section: 3, topic: "Reading Comprehension", 
+                context: "Neil: Hey, Rob! Do you have any plans for the weekend?\nRob: Not really, but my parents might ask me to go out with them.\nNeil: Hmmm, where is your family going?\nRob: I don't know yet. You know my mum changes her mind every time, and we all have to follow her. Last time she wanted to go to Kampot, or perhaps Kep. I am not really sure.",
+                question: "3. Does Rob's mother have a clear plan right now?", 
+                options: ["a. Yes, she always plans early.", "b. No, she changes her mind every time.", "c. Yes, she decided to go to Kep.", "d. No, she stays home."], answer: 1 
+            },
+            { 
+                id: 99, section: 3, topic: "Reading Comprehension", 
+                context: "Neil: Hey, Rob! Do you have any plans for the weekend?\nRob: Not really, but my parents might ask me to go out with them.\nNeil: Hmmm, where is your family going?\nRob: I don't know yet. You know my mum changes her mind every time, and we all have to follow her. Last time she wanted to go to Kampot, or perhaps Kep. I am not really sure.",
+                question: "4. Where did Rob's mother want to go last time?", 
+                options: ["a. Phnom Penh or Siem Reap", "b. Kampot or Kep", "c. Mondulkiri or Battambang", "d. Thailand or Vietnam"], answer: 1 
+            },
+            { 
+                id: 100, section: 3, topic: "Reading Comprehension", 
+                context: "Neil: Hey, Rob! Do you have any plans for the weekend?\nRob: Not really, but my parents might ask me to go out with them.\nNeil: Hmmm, where is your family going?\nRob: I don't know yet. You know my mum changes her mind every time, and we all have to follow her. Last time she wanted to go to Kampot, or perhaps Kep. I am not really sure.",
+                question: "5. Who usually decides the family trip in Rob's house?", 
+                options: ["a. Rob", "b. Neil", "c. Rob's mother", "d. Rob's father"], answer: 2 
+            }
+        ];
+
+        // State Management
+        let appState = {
+            studentName: "",
+            studentClass: "",
+            userAnswers: {}, // { qId: optionIndex }
+            sectionScores: { 1: null, 2: null, 3: null },
+            sectionCompleted: { 1: false, 2: false, 3: false },
+            currentSection: 1,
+            currentQuestionIndex: 0 // Index relative to active section questions
+        };
+
+        // Utility: Get Questions for active section
+        function getQuestionsBySection(secId) {
+            return QUESTION_DATABASE.filter(q => q.section === secId);
+        }
+
+        // Start Application from Welcome Screen
+        function startApp() {
+            const nameInput = document.getElementById('inputStudentName').value.trim();
+            const classInput = document.getElementById('inputStudentClass').value.trim();
+
+            if (!nameInput) {
+                alert("Please enter your name to begin!");
+                return;
+            }
+
+            appState.studentName = nameInput;
+            appState.studentClass = classInput || "Four Corners 2B";
+
+            // Update Header & Hub Display
+            document.getElementById('headerStudentName').innerText = appState.studentName;
+            document.getElementById('headerStudentClass').innerText = appState.studentClass;
+            document.getElementById('headerStudentBadge').classList.remove('hidden');
+
+            document.getElementById('hubStudentName').innerText = appState.studentName;
+
+            // Switch Screen
+            showScreen('screenRoadmap');
+            updateRoadmapUI();
+        }
+
+        // Screen Navigation Switcher
+        function showScreen(screenId) {
+            const screens = ['screenWelcome', 'screenRoadmap', 'screenQuiz', 'screenResults'];
+            screens.forEach(id => {
+                const el = document.getElementById(id);
+                if (id === screenId) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Update Roadmap UI based on progress
+        function updateRoadmapUI() {
+            let totalAnswered = Object.keys(appState.userAnswers).length;
+            let totalScoreAcc = 0;
+            let completedCount = 0;
+
+            // Section 1 State
+            if (appState.sectionCompleted[1]) {
+                completedCount += 40;
+                document.getElementById('statusBadgeSec1').className = "px-3 py-1 bg-green-100 text-green-700 font-bold text-xs rounded-full";
+                document.getElementById('statusBadgeSec1').innerText = "Completed ✅";
+                document.getElementById('scoreTextSec1').innerText = `${appState.sectionScores[1]} / 40`;
+                
+                // Unlock Section 2
+                document.getElementById('cardSection2').classList.remove('opacity-90');
+                document.getElementById('statusBadgeSec2').className = "px-3 py-1 bg-yellow-100 text-yellow-700 font-bold text-xs rounded-full";
+                document.getElementById('statusBadgeSec2').innerText = "Unlocked 🚀";
+                document.getElementById('scoreTextSec2').innerText = appState.sectionCompleted[2] ? `${appState.sectionScores[2]} / 30` : "Ready";
+                const btn2 = document.getElementById('btnSec2');
+                btn2.disabled = false;
+                btn2.className = "w-full py-2.5 bg-purple-500 hover:bg-purple-600 text-white font-fun font-semibold rounded-xl text-sm shadow transition";
+                btn2.innerText = appState.sectionCompleted[2] ? "Review Section 2" : "Start Section 2";
+            }
+
+            // Section 2 State
+            if (appState.sectionCompleted[2]) {
+                completedCount += 30;
+                document.getElementById('statusBadgeSec2').className = "px-3 py-1 bg-green-100 text-green-700 font-bold text-xs rounded-full";
+                document.getElementById('statusBadgeSec2').innerText = "Completed ✅";
+                document.getElementById('scoreTextSec2').innerText = `${appState.sectionScores[2]} / 30`;
+
+                // Unlock Section 3
+                document.getElementById('cardSection3').classList.remove('opacity-90');
+                document.getElementById('statusBadgeSec3').className = "px-3 py-1 bg-yellow-100 text-yellow-700 font-bold text-xs rounded-full";
+                document.getElementById('statusBadgeSec3').innerText = "Unlocked 🚀";
+                document.getElementById('scoreTextSec3').innerText = appState.sectionCompleted[3] ? `${appState.sectionScores[3]} / 30` : "Ready";
+                const btn3 = document.getElementById('btnSec3');
+                btn3.disabled = false;
+                btn3.className = "w-full py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white font-fun font-semibold rounded-xl text-sm shadow transition";
+                btn3.innerText = appState.sectionCompleted[3] ? "Review Section 3" : "Start Section 3";
+            }
+
+            // Section 3 State
+            if (appState.sectionCompleted[3]) {
+                completedCount += 30;
+                document.getElementById('statusBadgeSec3').className = "px-3 py-1 bg-green-100 text-green-700 font-bold text-xs rounded-full";
+                document.getElementById('statusBadgeSec3').innerText = "Completed ✅";
+                document.getElementById('scoreTextSec3').innerText = `${appState.sectionScores[3]} / 30`;
+            }
+
+            // Overall Progress Bars
+            let overallCorrect = 0;
+            QUESTION_DATABASE.forEach(q => {
+                if (appState.userAnswers[q.id] === q.answer) {
+                    overallCorrect++;
+                }
+            });
+
+            let percentage = Math.round((totalAnswered / 100) * 100);
+            let overallScorePercent = totalAnswered > 0 ? Math.round((overallCorrect / 100) * 100) : 0;
+
+            document.getElementById('hubTotalProgressText').innerText = `${totalAnswered} / 100`;
+            document.getElementById('hubTotalScoreText').innerText = `${overallScorePercent}%`;
+            document.getElementById('progressBarPercentage').innerText = `${percentage}%`;
+            document.getElementById('mainProgressBar').style.width = `${percentage}%`;
+
+            // Enable Final Results Button when all 3 sections are completed
+            const btnFinal = document.getElementById('btnViewFinalResults');
+            if (appState.sectionCompleted[1] && appState.sectionCompleted[2] && appState.sectionCompleted[3]) {
+                btnFinal.disabled = false;
+                btnFinal.className = "px-8 py-4 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white font-fun text-xl font-bold rounded-2xl shadow-xl hover:scale-105 transition animate-glow";
+            }
+        }
+
+        // Launch Quiz Section
+        function launchQuizSection(sectionNum) {
+            appState.currentSection = sectionNum;
+            appState.currentQuestionIndex = 0;
+            showScreen('screenQuiz');
+            renderQuestion();
+        }
+
+        // Return to Roadmap
+        function returnToRoadmap() {
+            showScreen('screenRoadmap');
+            updateRoadmapUI();
+        }
+
+        // Render Current Question
+        function renderQuestion() {
+            const questions = getQuestionsBySection(appState.currentSection);
+            const q = questions[appState.currentQuestionIndex];
+
+            // Section Headers
+            const titles = { 1: "Section 1: Grammar Sprint", 2: "Section 2: Structure & Rules", 3: "Section 3: Modals, Vocab & Reading" };
+            document.getElementById('quizSectionTitle').innerText = titles[appState.currentSection];
+            document.getElementById('quizQuestionCounter').innerText = `Question ${appState.currentQuestionIndex + 1} / ${questions.length}`;
+            document.getElementById('quizTopicTag').innerHTML = `<span>Topic: ${q.topic}</span>`;
+            document.getElementById('quizQuestionText').innerText = q.question;
+
+            // Reading Context Box if available
+            const contextBox = document.getElementById('quizContextBox');
+            if (q.context) {
+                contextBox.innerText = q.context;
+                contextBox.classList.remove('hidden');
+            } else {
+                contextBox.classList.add('hidden');
+            }
+
+            // Options
+            const container = document.getElementById('quizOptionsContainer');
+            container.innerHTML = "";
+
+            const currentAnswer = appState.userAnswers[q.id];
+
+            q.options.forEach((opt, idx) => {
+                const optBtn = document.createElement('button');
+                optBtn.className = "w-full text-left p-4 rounded-xl border-2 transition font-medium text-sm flex justify-between items-center ";
+                
+                if (currentAnswer === undefined) {
+                    optBtn.className += "border-gray-200 hover:border-pink-300 hover:bg-pink-50/50 bg-white text-gray-700";
+                } else if (idx === q.answer) {
+                    optBtn.className += "border-green-500 bg-green-50 text-green-800 font-bold";
+                } else if (idx === currentAnswer) {
+                    optBtn.className += "border-red-400 bg-red-50 text-red-700";
+                } else {
+                    optBtn.className += "border-gray-100 bg-gray-50 text-gray-400";
+                }
+
+                optBtn.innerHTML = `<span>${opt}</span>`;
+                if (currentAnswer !== undefined) {
+                    if (idx === q.answer) optBtn.innerHTML += `<span class="text-green-600 font-bold">✓ Correct</span>`;
+                    else if (idx === currentAnswer) optBtn.innerHTML += `<span class="text-red-500 font-bold">✗ Incorrect</span>`;
+                }
+
+                optBtn.onclick = () => handleSelectOption(q.id, idx);
+                container.appendChild(optBtn);
+            });
+
+            // Feedback Box
+            const feedbackBox = document.getElementById('quizFeedbackBox');
+            if (currentAnswer !== undefined) {
+                feedbackBox.classList.remove('hidden');
+                if (currentAnswer === q.answer) {
+                    feedbackBox.className = "mt-6 p-4 rounded-xl text-sm font-semibold flex items-center space-x-3 bg-green-100 text-green-800 border border-green-200";
+                    document.getElementById('quizFeedbackIcon').innerText = "🎉";
+                    document.getElementById('quizFeedbackText').innerHTML = "<strong>Excellent!</strong> That's the correct answer.";
+                } else {
+                    feedbackBox.className = "mt-6 p-4 rounded-xl text-sm font-semibold flex items-center space-x-3 bg-red-100 text-red-800 border border-red-200";
+                    document.getElementById('quizFeedbackIcon').innerText = "💡";
+                    document.getElementById('quizFeedbackText').innerHTML = `<strong>Not quite!</strong> Correct answer: <span class="underline">${q.options[q.answer]}</span>`;
+                }
+            } else {
+                feedbackBox.classList.add('hidden');
+            }
+
+            // Prev / Next Controls
+            document.getElementById('btnPrevQuestion').disabled = (appState.currentQuestionIndex === 0);
+            
+            const btnNext = document.getElementById('btnNextQuestion');
+            if (appState.currentQuestionIndex === questions.length - 1) {
+                btnNext.innerText = "Finish Section 🏆";
+            } else {
+                btnNext.innerText = "Next Question ➔";
+            }
+        }
+
+        // Handle Option Selection
+        function handleSelectOption(qId, optIdx) {
+            appState.userAnswers[qId] = optIdx;
+            renderQuestion();
+        }
+
+        // Next Question Handler
+        function nextQuestion() {
+            const questions = getQuestionsBySection(appState.currentSection);
+            if (appState.currentQuestionIndex < questions.length - 1) {
+                appState.currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                // Section Completed
+                calculateSectionScore(appState.currentSection);
+                appState.sectionCompleted[appState.currentSection] = true;
+                
+                // Trigger celebratory confetti
+                confetti({
+                    particleCount: 80,
+                    spread: 60,
+                    origin: { y: 0.6 }
+                });
+
+                returnToRoadmap();
+            }
+        }
+
+        // Previous Question Handler
+        function prevQuestion() {
+            if (appState.currentQuestionIndex > 0) {
+                appState.currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+
+        // Calculate score for a section
+        function calculateSectionScore(secId) {
+            const questions = getQuestionsBySection(secId);
+            let score = 0;
+            questions.forEach(q => {
+                if (appState.userAnswers[q.id] === q.answer) {
+                    score++;
+                }
+            });
+            appState.sectionScores[secId] = score;
+        }
+
+        // Show Final Results & Evaluation Slide
+        function showResultsScreen() {
+            let totalCorrect = 0;
+            QUESTION_DATABASE.forEach(q => {
+                if (appState.userAnswers[q.id] === q.answer) totalCorrect++;
+            });
+
+            const percent = Math.round((totalCorrect / 100) * 100);
+
+            // Populate Breakdown
+            document.getElementById('resSec1Score').innerText = `${appState.sectionScores[1] || 0} / 40`;
+            document.getElementById('resSec2Score').innerText = `${appState.sectionScores[2] || 0} / 30`;
+            document.getElementById('resSec3Score').innerText = `${appState.sectionScores[3] || 0} / 30`;
+
+            document.getElementById('resultFinalScore').innerText = `${percent}%`;
+            document.getElementById('resultRawScore').innerText = `${totalCorrect} out of 100 questions correct`;
+
+            // Dynamic Praise & Emoji Evaluation based on score
+            const emojiEl = document.getElementById('resultEmoji');
+            const titleEl = document.getElementById('resultTitle');
+            const subEl = document.getElementById('resultSubtitle');
+            const noteEl = document.getElementById('resultTeacherNote');
+
+            if (percent >= 90) {
+                emojiEl.innerText = "🌟";
+                emojiEl.className = "text-7xl sm:text-8xl animate-cute-bounce";
+                titleEl.innerText = "SUPER STAR!";
+                subEl.innerText = "Outstanding Mastery of Units 7–9!";
+                noteEl.innerText = `"Phenomenal job, ${appState.studentName}! You have mastered all grammar, vocabulary, and reading comprehension goals for Four Corners 2B. Keep shining!" — Teacher Lida MONG`;
+            } else if (percent >= 75) {
+                emojiEl.innerText = "👍";
+                emojiEl.className = "text-7xl sm:text-8xl animate-wiggle";
+                titleEl.innerText = "GREAT JOB!";
+                subEl.innerText = "Strong English Proficiency!";
+                noteEl.innerText = `"Very well done, ${appState.studentName}! You have a solid command of comparative adjectives, past tense, and modals. A little review and you'll be at 100%!" — Teacher Lida MONG`;
+            } else if (percent >= 50) {
+                emojiEl.innerText = "👋";
+                emojiEl.className = "text-7xl sm:text-8xl animate-float";
+                titleEl.innerText = "GOOD EFFORT!";
+                subEl.innerText = "Keep practicing to improve!";
+                noteEl.innerText = `"Good try, ${appState.studentName}! You passed the practice exam. Review the questions you missed in Sections 1 & 2 to boost your midterm score!" — Teacher Lida MONG`;
+            } else {
+                emojiEl.innerText = "📣";
+                emojiEl.className = "text-7xl sm:text-8xl animate-bounce";
+                titleEl.innerText = "KEEP TRYING!";
+                subEl.innerText = "Don't give up! Practice makes perfect.";
+                noteEl.innerText = `"Don't worry, ${appState.studentName}! Practice is the key to success. Re-read the Four Corners 2B study guide and give it another try!" — Teacher Lida MONG`;
+            }
+
+            // Update Certificate details
+            document.getElementById('certStudentName').innerText = appState.studentName;
+            document.getElementById('certScore').innerText = `${percent}%`;
+            
+            const today = new Date();
+            document.getElementById('certDate').innerText = today.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+            showScreen('screenResults');
+
+            // Grand Confetti Blast
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.4 }
+            });
+        }
+
+        // Reset App for retake
+        function resetApp() {
+            appState.userAnswers = {};
+            appState.sectionScores = { 1: null, 2: null, 3: null };
+            appState.sectionCompleted = { 1: false, 2: false, 3: false };
+            appState.currentSection = 1;
+            appState.currentQuestionIndex = 0;
+
+            // Reset Section cards in roadmap
+            document.getElementById('statusBadgeSec1').className = "px-3 py-1 bg-yellow-100 text-yellow-700 font-bold text-xs rounded-full";
+            document.getElementById('statusBadgeSec1').innerText = "Ready 🚀";
+            document.getElementById('scoreTextSec1').innerText = "Not Started";
+
+            document.getElementById('cardSection2').classList.add('opacity-90');
+            document.getElementById('statusBadgeSec2').className = "px-3 py-1 bg-gray-100 text-gray-600 font-bold text-xs rounded-full";
+            document.getElementById('statusBadgeSec2').innerText = "Locked 🔒";
+            document.getElementById('scoreTextSec2').innerText = "Locked";
+            const btn2 = document.getElementById('btnSec2');
+            btn2.disabled = true;
+            btn2.className = "w-full py-2.5 bg-gray-300 text-white font-fun font-semibold rounded-xl text-sm cursor-not-allowed transition";
+            btn2.innerText = "Locked";
+
+            document.getElementById('cardSection3').classList.add('opacity-90');
+            document.getElementById('statusBadgeSec3').className = "px-3 py-1 bg-gray-100 text-gray-600 font-bold text-xs rounded-full";
+            document.getElementById('statusBadgeSec3').innerText = "Locked 🔒";
+            document.getElementById('scoreTextSec3').innerText = "Locked";
+            const btn3 = document.getElementById('btnSec3');
+            btn3.disabled = true;
+            btn3.className = "w-full py-2.5 bg-gray-300 text-white font-fun font-semibold rounded-xl text-sm cursor-not-allowed transition";
+            btn3.innerText = "Locked";
+
+            const btnFinal = document.getElementById('btnViewFinalResults');
+            btnFinal.disabled = true;
+            btnFinal.className = "px-8 py-3 bg-gray-300 text-white font-fun text-lg font-bold rounded-2xl cursor-not-allowed transition shadow";
+
+            showScreen('screenRoadmap');
+            updateRoadmapUI();
+        }
+    </script>
+</body>
+</html>
